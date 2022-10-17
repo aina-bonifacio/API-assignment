@@ -100,6 +100,22 @@ def update_menu(order_id):
     menu[0]["done"] = request.json.get("done", menu[0]["done"])
     return jsonify({"menu": menu[0]})
     
+@menu.route("/apitesting/restaurant/v1.0/menu/<int:order_id>", methods=["PATCH"])
+def modify_menu(order_id):
+    menu = [menu for menu in menus if menu["order"] == order_id]
+    if not menu:
+        abort(404)
+    if not request.json:
+        abort(400)
+    if "food" in request.json and type(request.json["food"]) != str:
+        abort(400)
+    if "description" in request.json and type(request.json["description"]) is not str:
+        abort(400)
+    menu[0]["food"] = request.json.get("food", menu[0]["food"])
+    menu[0]["description"] = request.json.get("description", menu[0]["description"])
+    menu[0]["done"] = request.json.get("done", menu[0]["done"])
+    return jsonify({"menu": menu[0]})
+    
 @menu.route("/apitesting/restaurant/v1.0/menu/<int:order_id>", methods=["DELETE"])
 def delete_task(order_id):
     menu = [menu for menu in menus if menu["order"] == order_id]
